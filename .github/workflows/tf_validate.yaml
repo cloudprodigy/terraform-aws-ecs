@@ -25,6 +25,11 @@ jobs:
     # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
     - name: Terraform Init
       run: terraform init
+      env:
+        GIT_SSH_COMMAND: "echo '${{ secrets.ORG_PRIVATE_SSH_KEY }}' > id_rsa
+          && ssh-keyscan github.com > known_hosts
+          && chmod 600 id_rsa known_hosts
+          && ssh -i ./id_rsa -o UserKnownHostsFile=./known_hosts"
       
     # Checks that all Terraform configuration files adhere to a canonical format
     - name: Terraform Format

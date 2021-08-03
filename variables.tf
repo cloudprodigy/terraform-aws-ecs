@@ -67,6 +67,7 @@ variable "private_subnets" {
 
 }
 
+
 variable "ecs_cluster_name" {
   type        = string
   description = "Name of the ECS cluster"
