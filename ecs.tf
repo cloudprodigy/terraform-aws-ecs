@@ -81,9 +81,10 @@ resource "aws_ecs_task_definition" "this" {
   memory                   = var.launch_type == "FARGATE" ? 512 : null
   requires_compatibilities = ["EC2", "FARGATE"]
   network_mode             = var.launch_type == "FARGATE" ? "awsvpc" : "bridge"
-  task_role_arn            = var.launch_type == "FARGATE" ? aws_iam_role.task_execution.arn : null
-  execution_role_arn       = var.launch_type == "FARGATE" ? data.aws_iam_role.execution_role.arn : null
+  #task_role_arn            = var.launch_type == "FARGATE" ? aws_iam_role.task_execution.arn : null
+  execution_role_arn = var.launch_type == "FARGATE" ? aws_iam_role.task_execution.arn : null
   #tfsec:ignore:AWS096
+
   volume {
     name = "shared"
     efs_volume_configuration {
@@ -102,6 +103,11 @@ resource "aws_ecs_service" "this" {
   desired_count   = var.app_count
   depends_on      = [aws_iam_role_policy.ecs_service_role_policy]
   launch_type     = var.launch_type
+
+  network_configuration {
+    subnets         = var.private_subnets
+    security_groups = [aws_security_group.ecs.id]
+  }
 
   load_balancer {
     target_group_arn = var.alb_target_group_arn
