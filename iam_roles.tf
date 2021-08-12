@@ -29,12 +29,35 @@ resource "aws_iam_role_policy" "ecs_node_role_policy" {
 
 #Fargate
 resource "aws_iam_role" "task_execution" {
-  name                = "${var.app_name}_task_execution_role"
-  tags                = local.common_tags
-  assume_role_policy  = data.aws_iam_policy_document.task.json
-  managed_policy_arns = ["arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"]
+  name               = "${var.app_name}_task_execution_role"
+  tags               = local.common_tags
+  assume_role_policy = data.aws_iam_policy_document.task.json
 }
 
+resource "aws_iam_role_policy_attachment" "task_role" {
+  role       = aws_iam_role.task_execution.name
+  policy_arn = aws_iam_policy.task_role.arn
+}
+
+resource "aws_iam_policy" "task_role" {
+  name   = "${var.app_name}_task_execution_policy"
+  path   = "/"
+  policy = data.aws_iam_policy_document.task_execution.json
+}
+
+data "aws_iam_policy_document" "task_execution" {
+  statement {
+    actions = [
+      "ecr:GetAuthorizationToken",
+      "ecr:BatchCheckLayerAvailability",
+      "ecr:GetDownloadUrlForLayer",
+      "ecr:BatchGetImage",
+      "logs:CreateLogStream",
+      "logs:PutLogEvents"
+    ]
+    resources = ["*"]
+  }
+}
 data "aws_iam_policy_document" "task" {
   statement {
     actions = ["sts:AssumeRole"]

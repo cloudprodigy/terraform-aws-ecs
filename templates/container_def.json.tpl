@@ -3,7 +3,7 @@
     "name": "${app_name}",
     "image": "${docker_image_url}",
     "essential": true,
-    "cpu": 10,
+    "cpu": 1,
     "memory": 128,
     "portMappings": [
       {
