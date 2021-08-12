@@ -80,6 +80,7 @@ resource "aws_ecs_task_definition" "this" {
   cpu                      = var.launch_type == "FARGATE" ? 256 : null
   memory                   = var.launch_type == "FARGATE" ? 512 : null
   requires_compatibilities = ["EC2", "FARGATE"]
+  network_mode             = var.launch_type == "FARGATE" ? "awsvpc" : "bridge"
 
   #tfsec:ignore:AWS096
   volume {
