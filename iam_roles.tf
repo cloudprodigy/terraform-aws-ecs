@@ -26,3 +26,21 @@ resource "aws_iam_role_policy" "ecs_node_role_policy" {
   policy = data.aws_iam_policy_document.ecs_node_role_policy.json
   role   = aws_iam_role.ecs_node_role.id
 }
+
+#Fargate
+resource "aws_iam_role" "task_execution" {
+  name                = "${var.app_name}_task_execution_role"
+  tags                = local.common_tags
+  assume_role_policy  = data.aws_iam_policy_document.task.json
+  managed_policy_arns = ["arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"]
+}
+
+data "aws_iam_policy_document" "task" {
+  statement {
+    actions = ["sts:AssumeRole"]
+    principals {
+      type        = "Service"
+      identifiers = ["ecs-tasks-amazonaws.com"]
+    }
+  }
+}
