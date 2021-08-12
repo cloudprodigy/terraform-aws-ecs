@@ -99,7 +99,7 @@ resource "aws_ecs_service" "this" {
   name            = "${var.ecs_cluster_name}-service"
   cluster         = aws_ecs_cluster.cluster.id
   task_definition = aws_ecs_task_definition.this.arn
-  iam_role        = aws_iam_role.ecs_service_role.arn
+  iam_role        = var.launch_type == "FARGATE" ? null : aws_iam_role.ecs_service_role.arn
   desired_count   = var.app_count
   depends_on      = [aws_iam_role_policy.ecs_service_role_policy]
   launch_type     = var.launch_type
