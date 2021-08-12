@@ -17,7 +17,7 @@
     ],
     "mountPoints": [
       {
-        "containerPath": "/opt/shared",
+        "containerPath": "${container_path}",
         "sourceVolume": "shared"
       }
     ],
