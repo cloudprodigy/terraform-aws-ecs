@@ -82,7 +82,7 @@ resource "aws_ecs_task_definition" "this" {
   requires_compatibilities = ["EC2", "FARGATE"]
   network_mode             = var.launch_type == "FARGATE" ? "awsvpc" : "bridge"
   task_role_arn            = var.launch_type == "FARGATE" ? aws_iam_role.task_execution.arn : null
-
+  execution_role_arn       = var.launch_type == "FARGATE" ? data.aws_iam_role.execution_role.arn : null
   #tfsec:ignore:AWS096
   volume {
     name = "shared"
