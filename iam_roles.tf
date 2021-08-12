@@ -31,15 +31,15 @@ resource "aws_iam_role_policy" "ecs_node_role_policy" {
 resource "aws_iam_role" "task_execution" {
   name               = "${var.app_name}_task_execution_role"
   tags               = local.common_tags
-  assume_role_policy = data.aws_iam_policy_document.task.json
+  assume_role_policy = data.aws_iam_policy_document.assume_task_execution.json
 }
 
-resource "aws_iam_role_policy_attachment" "task_role" {
+resource "aws_iam_role_policy_attachment" "task_execution" {
   role       = aws_iam_role.task_execution.name
-  policy_arn = aws_iam_policy.task_role.arn
+  policy_arn = aws_iam_policy.task_execution.arn
 }
 
-resource "aws_iam_policy" "task_role" {
+resource "aws_iam_policy" "task_execution" {
   name   = "${var.app_name}_task_execution_policy"
   path   = "/"
   policy = data.aws_iam_policy_document.task_execution.json
@@ -58,7 +58,7 @@ data "aws_iam_policy_document" "task_execution" {
     resources = ["*"]
   }
 }
-data "aws_iam_policy_document" "task" {
+data "aws_iam_policy_document" "assume_task_execution" {
   statement {
     actions = ["sts:AssumeRole"]
     principals {
