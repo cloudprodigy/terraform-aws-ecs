@@ -74,9 +74,12 @@ data "template_file" "app" {
 }
 
 resource "aws_ecs_task_definition" "this" {
-  family                = var.app_name
-  container_definitions = data.template_file.app.rendered
-  depends_on            = [aws_efs_file_system.efs]
+  family                   = var.app_name
+  container_definitions    = data.template_file.app.rendered
+  depends_on               = [aws_efs_file_system.efs]
+  cpu = var.launch_type == "FARGATE" ? 256 : null
+  memory = var.launch_type == "FARGATE" ? 512 : null
+  requires_compatibilities = ["EC2", "FARGATE"]
 
   #tfsec:ignore:AWS096
   volume {
