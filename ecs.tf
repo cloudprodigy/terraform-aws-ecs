@@ -77,8 +77,8 @@ resource "aws_ecs_task_definition" "this" {
   family                   = var.app_name
   container_definitions    = data.template_file.app.rendered
   depends_on               = [aws_efs_file_system.efs]
-  cpu                      = var.launch_type == "FARGATE" ? 256 : null
-  memory                   = var.launch_type == "FARGATE" ? 512 : null
+  cpu                      = var.launch_type == "FARGATE" ? 1024 : null
+  memory                   = var.launch_type == "FARGATE" ? 3072 : null
   requires_compatibilities = ["EC2", "FARGATE"]
   network_mode             = var.launch_type == "FARGATE" ? "awsvpc" : "bridge"
   #task_role_arn            = var.launch_type == "FARGATE" ? aws_iam_role.task_execution.arn : null
