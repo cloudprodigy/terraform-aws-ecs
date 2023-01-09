@@ -15,8 +15,8 @@
 ### Example
 ```
 module "ecs" {
-source  = "cloudprodigy/vpc/ecs"
-version = "2.0.0"
+source  = "cloudprodigy/ecs/aws"
+version = "2.0.1"
 app_name         = local.app_name
 ecs_cluster_name = local.app_name
 subnets          = module.vpc.private_subnets
