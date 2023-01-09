@@ -1,20 +1,22 @@
 resource "aws_efs_file_system" "efs" {
+  count          = var.enable_efs == "yes" ? 1 : 0
   creation_token = "${var.app_name}_efs_fs"
   encrypted      = true
-  tags           = local.common_tags
+
 }
 
 resource "aws_efs_access_point" "this" {
-  file_system_id = aws_efs_file_system.efs.id
+  count          = var.enable_efs == "yes" ? 1 : 0
+  file_system_id = aws_efs_file_system.efs[count.index].id
   root_directory {
     path = "/"
   }
-  tags = local.common_tags
+
 }
 
 resource "aws_efs_mount_target" "efs_tgt" {
-  count           = length(var.private_subnets)
-  file_system_id  = aws_efs_file_system.efs.id
-  subnet_id       = element(var.private_subnets, count.index)
-  security_groups = [aws_security_group.efs.id]
+  count           = var.enable_efs == "yes" ? length(var.subnets) : 0
+  file_system_id  = one(aws_efs_file_system.efs.*.id)
+  subnet_id       = element(var.subnets, count.index)
+  security_groups = [one(aws_security_group.efs.*.id)]
 }
