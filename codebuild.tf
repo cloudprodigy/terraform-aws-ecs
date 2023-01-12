@@ -28,8 +28,8 @@ resource "aws_codebuild_project" "this" {
 
   logs_config {
     cloudwatch_logs {
-      group_name  = "${var.app_name}-log-group-${var.environment}"
-      stream_name = "${var.app_name}-log-stream-${var.environment}"
+      group_name  = aws_cloudwatch_log_group.codebuild[each.key].name
+      stream_name = aws_cloudwatch_log_stream.codebuild[each.key].name
     }
 
     s3_logs {
