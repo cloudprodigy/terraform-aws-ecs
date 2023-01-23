@@ -16,7 +16,7 @@
 ```
 module "ecs" {
 source  = "cloudprodigy/ecs/aws"
-version = "2.0.2"
+version = "2.0.3"
 app_name         = local.app_name
 ecs_cluster_name = local.app_name
 subnets          = module.vpc.private_subnets
@@ -200,4 +200,8 @@ No modules.
 
 ## Outputs
 
-No outputs.
+| Name | Description |
+|------|-------------|
+| <a name="output_cluster_arn"></a> [cluster\_arn](#output\_cluster\_arn) | n/a |
+| <a name="output_security_group_id"></a> [security\_group\_id](#output\_security\_group\_id) | n/a |
+| <a name="output_task_arns"></a> [task\_arns](#output\_task\_arns) | n/a |

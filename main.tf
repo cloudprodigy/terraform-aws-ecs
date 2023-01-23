@@ -17,7 +17,7 @@
  * ```
  * module "ecs" { 
  * source  = "cloudprodigy/ecs/aws"
- * version = "2.0.1"
+ * version = "2.0.3"
  * app_name         = local.app_name
  * ecs_cluster_name = local.app_name
  * subnets          = module.vpc.private_subnets
